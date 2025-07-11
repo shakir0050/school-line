@@ -43,7 +43,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 // POST: Add a new school
-app.post("/addSchool", (req, res) => {
+app.post("/", (req, res) => {
      
     const {id, name, address, latitude, longitude } = req.body;
 
