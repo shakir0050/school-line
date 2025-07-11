@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const mysql = require("mysql2");
 const path = require("path");
-//require('dotenv').config();
+require('dotenv').config();
 const port = 8080;
 
 app.use(express.urlencoded({ extended: true }));
@@ -10,12 +10,19 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
  
-
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    database: 'school',
-    password: 'Sh@kir82'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
+});
+
+connection.connect(err => {
+  if (err) {
+    console.error('DB connection failed:', err.stack);
+    return;
+  }
+  console.log('Connected to DB!');
 });
 
 
@@ -49,7 +56,7 @@ app.post("/addSchool", (req, res) => {
         if (err) {
             console.log(err);
             return res.send("Database error while adding school.");
-        }
+        };
         console.log("School detail added!")
         res.send("School Detail added!")
     });
